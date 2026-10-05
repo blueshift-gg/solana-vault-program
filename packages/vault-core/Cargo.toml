@@ -1,0 +1,9 @@
+[package]
+name = "vault-core"
+version = "0.0.1"
+edition = "2021"
+description = "Shared account layouts, error codes and value math for the Solana Vault Program"
+license = "MIT"
+
+[dependencies]
+pinocchio = { workspace = true }

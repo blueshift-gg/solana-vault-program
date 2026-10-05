@@ -1,0 +1,26 @@
+{
+  "name": "vault-kit",
+  "version": "0.0.1",
+  "description": "Codama-generated @solana/kit client for the Solana Vault Program.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "dist/src"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "peerDependencies": {
+    "@solana/kit": "^8.3.0"
+  },
+  "dependencies": {
+    "@solana/program-client-core": "^8.3.0"
+  }
+}

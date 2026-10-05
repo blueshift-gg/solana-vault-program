@@ -1,0 +1,18 @@
+[package]
+name = "custody-adapter"
+version = "0.0.1"
+edition = "2021"
+description = "Vault adapter for funds managed off chain: a fixed custody account and signed reports"
+license = "MIT"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+brine-ed25519 = "0.9.3"
+pinocchio = { workspace = true }
+pinocchio-system = "0.2.3"
+vault-core = { workspace = true }

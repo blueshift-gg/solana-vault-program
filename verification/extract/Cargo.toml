@@ -1,0 +1,8 @@
+# Extraction crate: compiles the shipped formula.rs, and nothing else, for Charon/Aeneas.
+[package]
+name = "vault_formula"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[workspace]

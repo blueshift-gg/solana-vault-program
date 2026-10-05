@@ -1,0 +1,9 @@
+/target
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Lean proofs: fetched dependencies and build output
+verification/.lake/
+verification/extract/target/
+verification/extract/*.llbc

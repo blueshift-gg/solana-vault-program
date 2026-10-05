@@ -1,0 +1,13 @@
+name = "vault_formula"
+defaultTargets = ["VaultFormula"]
+
+# The Aeneas Lean library, at the commit of the Aeneas that produced VaultFormula/Funs.lean.
+# It brings Mathlib with it.
+[[require]]
+name = "aeneas"
+git = "https://github.com/AeneasVerif/aeneas"
+rev = "557eff83ecef5083b98a52a94ca7fae63d6c1dab"
+subDir = "backends/lean"
+
+[[lean_lib]]
+name = "VaultFormula"

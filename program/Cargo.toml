@@ -1,0 +1,19 @@
+[package]
+name = "vault-program"
+version = "0.0.1"
+edition = "2021"
+description = "A single-exposure tokenized vault: stored accounting, clamped reports, one adapter or one manager"
+license = "MIT"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+brine-ed25519 = "0.9.3"
+pinocchio = { workspace = true }
+pinocchio-system = "0.2.3"
+pinocchio-token = { workspace = true }
+vault-core = { workspace = true }

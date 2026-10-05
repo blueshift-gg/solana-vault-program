@@ -1,0 +1,17 @@
+[package]
+name = "jupiter-lend-adapter"
+version = "0.0.1"
+edition = "2021"
+description = "Vault adapter for Jupiter Lend: one fToken position per vault"
+license = "MIT"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+pinocchio = { workspace = true }
+pinocchio-associated-token-account = "0.2.0"
+vault-core = { workspace = true }

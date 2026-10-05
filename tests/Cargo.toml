@@ -1,0 +1,29 @@
+[package]
+name = "vault-tests"
+version = "0.0.1"
+edition = "2021"
+publish = false
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+base64 = "0.22"
+custody-adapter = { path = "../adapters/custody" }
+ed25519-dalek = "2"
+jupiter-lend-adapter = { path = "../adapters/jupiter-lend" }
+serde_json = "1"
+vault-core = { workspace = true }
+mollusk-svm = "0.15.1"
+mollusk-svm-programs-token = "0.15.1"
+solana-instruction = "3"
+solana-account = "4"
+solana-pubkey = "4"
+solana-program-error = "3"
+solana-sha256-hasher = "3"
+
+[dev-dependencies]
+spl-token-2022-interface = "3"
+vault-rust = { path = "../packages/vault-rust" }
+borsh = "1"
