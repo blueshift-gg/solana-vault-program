@@ -83,7 +83,7 @@ impl<'a> SetPaused<'a> {
 /// With the strategy written down to zero the vault has nothing left to
 /// reprice, so holders can exit against idle with no report at all. Funds the
 /// strategy returns afterwards are not lost: they wait in the strategy
-/// account, `Simulate` counts them back in at the maximum rate like any gain,
+/// account, `Simulate` counts them back in as a gain, locked like any other,
 /// and `Deallocate` brings home what has been counted.
 ///
 /// Accounts: see `RoleAccounts`; the authority is the guardian.

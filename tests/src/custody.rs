@@ -65,11 +65,14 @@ impl Custodied {
                 token_account(&token_program, &f.asset_mint, &custody, 0),
             ),
         ]);
-        f.adapter_own = vec![
-            AccountMeta::new(custody, false),
-            AccountMeta::new(return_account, false),
-            AccountMeta::new(destination, false),
-        ];
+        f.adapter_own = idl_accounts(
+            "custody",
+            &[
+                ("custody", custody),
+                ("returnAccount", return_account),
+                ("destination", destination),
+            ],
+        );
         Self {
             f,
             custody,
@@ -85,31 +88,34 @@ impl Custodied {
     }
 
     pub fn initialize_ix(&self, owner: Pubkey) -> Instruction {
-        Instruction {
-            program_id: CUSTODY_ID,
-            accounts: vec![
-                AccountMeta::new(self.f.payer, true),
-                AccountMeta::new_readonly(owner, true),
-                AccountMeta::new_readonly(self.f.vault, false),
-                AccountMeta::new(self.custody, false),
-                AccountMeta::new_readonly(self.destination, false),
-                AccountMeta::new_readonly(self.return_account, false),
-                AccountMeta::new_readonly(SYSTEM, false),
+        let mut ix = idl_instruction(
+            "custody",
+            "initialize",
+            &[
+                ("payer", self.f.payer),
+                ("owner", owner),
+                ("vault", self.f.vault),
+                ("custody", self.custody),
+                ("destination", self.destination),
+                ("returnAccount", self.return_account),
             ],
-            data: [&INITIALIZE[..], key(&oracle()).as_ref()].concat(),
-        }
+        );
+        ix.data.extend(key(&oracle()).as_ref());
+        ix
     }
 
     pub fn set_oracle_ix(&self, owner: Pubkey, oracle: Pubkey) -> Instruction {
-        Instruction {
-            program_id: CUSTODY_ID,
-            accounts: vec![
-                AccountMeta::new_readonly(owner, true),
-                AccountMeta::new_readonly(self.f.vault, false),
-                AccountMeta::new(self.custody, false),
+        let mut ix = idl_instruction(
+            "custody",
+            "setOracle",
+            &[
+                ("owner", owner),
+                ("vault", self.f.vault),
+                ("custody", self.custody),
             ],
-            data: [&SET_ORACLE[..], oracle.as_ref()].concat(),
-        }
+        );
+        ix.data.extend(oracle.as_ref());
+        ix
     }
 
     /// `Simulate` delivering a price of `price` per unit (1.0 is

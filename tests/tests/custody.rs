@@ -215,7 +215,7 @@ fn only_the_vault_moves_funds_through_the_adapter() {
         thief,
         token_account(&TOKEN, &c.f.asset_mint, &c.f.stranger, 0),
     ));
-    let mut accounts = c.f.adapter_accounts();
+    let mut accounts = c.f.adapter_accounts("withdraw");
     accounts.remove(4); // the adapter program itself is not one of its accounts
     accounts[1].pubkey = thief;
     let withdraw = Instruction {

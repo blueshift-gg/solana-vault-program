@@ -166,7 +166,9 @@ fn generated_instructions_run_and_accounts_decode() {
         (PermitKind::Deposit as u8, PermitKind::Fulfil as u8),
         (PERMIT_DEPOSIT, PERMIT_FULFIL)
     );
-    let adapter = f.adapter_accounts();
+    let own = f.adapter_own.clone();
+    let prefix = f.adapter_accounts("");
+    let adapter = |call| [&prefix[..], &own[call]].concat();
 
     let (vault, bump) = Vault::find_pda(&f.share_mint);
     assert_eq!(vault, f.vault);
@@ -217,7 +219,7 @@ fn generated_instructions_run_and_accounts_decode() {
         .idle_account(f.idle_account)
         .amount(600)
         .data(vec![].into())
-        .add_remaining_accounts(&adapter)
+        .add_remaining_accounts(&adapter("deposit"))
         .instruction();
     f.ok(&same(generated, f.allocate_ix(600)));
 
@@ -229,7 +231,7 @@ fn generated_instructions_run_and_accounts_decode() {
         .vault(f.vault)
         .idle_account(f.idle_account)
         .data(by_hand.data[1..].to_vec().into())
-        .add_remaining_accounts(&adapter)
+        .add_remaining_accounts(&adapter("simulate"))
         .instruction();
     f.ok(&same(generated, by_hand));
     // A gain under an unlock period: the lock fields are in use. Half the
@@ -273,7 +275,7 @@ fn generated_instructions_run_and_accounts_decode() {
         .asset_token_program(f.token_program)
         .permit(fulfil_permit)
         .data(vec![].into())
-        .add_remaining_accounts(&adapter)
+        .add_remaining_accounts(&adapter("withdraw"))
         .instruction();
     f.ok(&same(generated, by_hand));
     assert_eq!(f.ticket_shares(1), None);
@@ -299,7 +301,7 @@ fn generated_instructions_run_and_accounts_decode() {
         .idle_account(f.idle_account)
         .amount(100)
         .data(vec![].into())
-        .add_remaining_accounts(&adapter)
+        .add_remaining_accounts(&adapter("withdraw"))
         .instruction();
     f.ok(&same(generated, f.deallocate_ix(100)));
 

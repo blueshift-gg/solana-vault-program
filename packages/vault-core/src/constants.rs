@@ -101,6 +101,32 @@ pub const VIEW_CONVERT_TO_SHARES: [u8; 8] = [139, 85, 78, 21, 184, 44, 70, 104];
 pub const VIEW_CONVERT_TO_ASSETS: [u8; 8] = [161, 61, 72, 20, 64, 203, 2, 155];
 pub const VIEW_MAX_DEPOSIT: [u8; 8] = [93, 242, 13, 103, 162, 85, 83, 106];
 
+// The token programs' account layouts, which SPL Token and Token-2022 share.
+// A test packs each account with the token program's own code and reads
+// these back.
+/// Length of a mint with no extensions.
+pub const MINT_LEN: usize = 82;
+/// A mint's authority: a four-byte option tag, then the key.
+pub const MINT_AUTHORITY: usize = 0;
+pub const MINT_DECIMALS: usize = 44;
+pub const MINT_IS_INITIALIZED: usize = 45;
+/// Length of a token account with no extensions.
+pub const TOKEN_ACCOUNT_LEN: usize = 165;
+pub const TOKEN_ACCOUNT_OWNER: usize = 32;
+pub const TOKEN_ACCOUNT_AMOUNT: usize = 64;
+/// Four-byte option tag of the delegate.
+pub const TOKEN_ACCOUNT_DELEGATE: usize = 72;
+/// 1 is initialized; 0 is not, 2 is frozen.
+pub const TOKEN_ACCOUNT_STATE: usize = 108;
+/// Four-byte option tag of the close authority.
+pub const TOKEN_ACCOUNT_CLOSE_AUTHORITY: usize = 129;
+/// Where a Token-2022 account with extensions says what it is, mints being
+/// padded to a token account's length, and where its extensions start.
+pub const ACCOUNT_TYPE: usize = TOKEN_ACCOUNT_LEN;
+pub const ACCOUNT_TYPE_MINT: u8 = 1;
+pub const ACCOUNT_TYPE_TOKEN_ACCOUNT: u8 = 2;
+pub const EXTENSIONS: usize = ACCOUNT_TYPE + 1;
+
 // TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb; a test checks it against the program.
 pub const TOKEN_2022: [u8; 32] = [
     6, 221, 246, 225, 238, 117, 143, 222, 24, 66, 93, 188, 228, 108, 205, 218, 182, 26, 252, 77,

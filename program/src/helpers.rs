@@ -146,7 +146,8 @@ impl<'a> TokenAccount<'a> {
     pub fn load(account: &'a AccountInfo, token_program: &Pubkey) -> Result<Self, ProgramError> {
         // SAFETY: the program holds no mutable borrow of a token account.
         let data = unsafe { account.borrow_data_unchecked() };
-        let layout = data.len() == 165 || (data.len() > 165 && data[165] == 2);
+        let layout = data.len() == TOKEN_ACCOUNT_LEN
+            || (data.len() > ACCOUNT_TYPE && data[ACCOUNT_TYPE] == ACCOUNT_TYPE_TOKEN_ACCOUNT);
         if !account.is_owned_by(token_program) || !layout {
             return Err(VaultError::InvalidTokenAccount.into());
         }
@@ -154,8 +155,12 @@ impl<'a> TokenAccount<'a> {
         // has alignment 1.
         Ok(Self {
             mint: unsafe { &*(data.as_ptr() as *const Pubkey) },
-            owner: unsafe { &*(data.as_ptr().add(32) as *const Pubkey) },
-            amount: u64::from_le_bytes(data[64..72].try_into().unwrap()),
+            owner: unsafe { &*(data.as_ptr().add(TOKEN_ACCOUNT_OWNER) as *const Pubkey) },
+            amount: u64::from_le_bytes(
+                data[TOKEN_ACCOUNT_AMOUNT..TOKEN_ACCOUNT_AMOUNT + 8]
+                    .try_into()
+                    .unwrap(),
+            ),
             data,
         })
     }
@@ -167,12 +172,13 @@ impl<'a> TokenAccount<'a> {
     /// `SetAuthority` keeps all of these, so ownership alone is not enough.
     #[inline(always)]
     pub fn check_clean(&self, mint: &Pubkey, owner: &Pubkey) -> ProgramResult {
-        let no_delegate = self.data[72..76] == [0; 4];
-        let initialized = self.data[108] == 1;
-        let no_close_authority = self.data[129..133] == [0; 4];
+        let no_delegate = self.data[TOKEN_ACCOUNT_DELEGATE..TOKEN_ACCOUNT_DELEGATE + 4] == [0; 4];
+        let initialized = self.data[TOKEN_ACCOUNT_STATE] == 1;
+        let no_close_authority =
+            self.data[TOKEN_ACCOUNT_CLOSE_AUTHORITY..TOKEN_ACCOUNT_CLOSE_AUTHORITY + 4] == [0; 4];
         let memo = self
             .data
-            .get(166..)
+            .get(EXTENSIONS..)
             .map(|tlv| extension(tlv, EXTENSION_MEMO_TRANSFER));
         let no_memo = matches!(memo, None | Some(Ok(None)) | Some(Ok(Some([0]))));
         if self.mint.ne(mint)
@@ -262,16 +268,19 @@ pub fn check_mint(mint: &AccountInfo) -> Result<u8, ProgramError> {
     // SAFETY: the program holds no mutable borrow of a mint.
     let data = unsafe { mint.borrow_data_unchecked() };
     let valid = if mint.is_owned_by(&pinocchio_token::ID) {
-        data.len() == 82
+        data.len() == MINT_LEN
     } else if mint.is_owned_by(&TOKEN_2022) {
-        data.len() == 82 || (data.len() > 166 && data[165] == 1 && !has_transfer_hook(&data[166..]))
+        data.len() == MINT_LEN
+            || (data.len() > EXTENSIONS
+                && data[ACCOUNT_TYPE] == ACCOUNT_TYPE_MINT
+                && !has_transfer_hook(&data[EXTENSIONS..]))
     } else {
         false
     };
-    if !valid || data[45] != 1 {
+    if !valid || data[MINT_IS_INITIALIZED] != 1 {
         return Err(VaultError::InvalidMint.into());
     }
-    Ok(data[44])
+    Ok(data[MINT_DECIMALS])
 }
 
 /// Find `wanted` in a Token-2022 TLV region: `[type: u16][length: u16][value]`
@@ -311,7 +320,9 @@ pub fn check_share_mint(mint: &AccountInfo, authority: &Pubkey) -> ProgramResult
     check_mint(mint)?;
     // SAFETY: the program holds no mutable borrow of a mint.
     let data = unsafe { mint.borrow_data_unchecked() };
-    if data[0..4] != [1, 0, 0, 0] || data[4..36] != authority[..] {
+    if data[MINT_AUTHORITY..MINT_AUTHORITY + 4] != [1, 0, 0, 0]
+        || data[MINT_AUTHORITY + 4..MINT_AUTHORITY + 36] != authority[..]
+    {
         return Err(VaultError::InvalidMint.into());
     }
     Ok(())
@@ -322,7 +333,7 @@ pub fn check_share_mint(mint: &AccountInfo, authority: &Pubkey) -> ProgramResult
 pub fn decimals(mint: &AccountInfo) -> Result<u8, ProgramError> {
     // SAFETY: the program holds no mutable borrow of a mint.
     unsafe { mint.borrow_data_unchecked() }
-        .get(44)
+        .get(MINT_DECIMALS)
         .copied()
         .ok_or(VaultError::InvalidMint.into())
 }

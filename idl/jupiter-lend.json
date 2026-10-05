@@ -1,0 +1,1469 @@
+{
+  "kind": "rootNode",
+  "standard": "codama",
+  "version": "1.9.2",
+  "program": {
+    "kind": "programNode",
+    "name": "jupiterLendAdapter",
+    "publicKey": "7T9qpK5R9oFtrXjRfS7r17cozooRDyemkCLPziBUJL18",
+    "version": "0.0.1",
+    "instructions": [
+      {
+        "kind": "instructionNode",
+        "name": "simulate",
+        "optionalAccountStrategy": "programId",
+        "accounts": [
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAuthority",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAccount",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "assetMint",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenAccount",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenAccount",
+                "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+                "seeds": [
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "strategyAuthority",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "tokenProgram",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "strategyAuthority",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "strategyAuthority"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "tokenProgram",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "tokenProgram"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lending",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "lending",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "lending"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            },
+            "accountLink": {
+              "kind": "accountLinkNode",
+              "name": "lending",
+              "program": {
+                "kind": "programLinkNode",
+                "name": "jupiterLending"
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenMint",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenMint",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "f_token_mint"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "instructionArgumentNode",
+            "name": "discriminator",
+            "defaultValueStrategy": "omitted",
+            "type": {
+              "kind": "fixedSizeTypeNode",
+              "size": 8,
+              "type": {
+                "kind": "bytesTypeNode"
+              }
+            },
+            "defaultValue": {
+              "kind": "bytesValueNode",
+              "data": "76364b267a084fa3",
+              "encoding": "base16"
+            }
+          }
+        ],
+        "discriminators": [
+          {
+            "kind": "fieldDiscriminatorNode",
+            "name": "discriminator",
+            "offset": 0
+          }
+        ]
+      },
+      {
+        "kind": "instructionNode",
+        "name": "deposit",
+        "optionalAccountStrategy": "programId",
+        "accounts": [
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAuthority",
+            "isWritable": true,
+            "isSigner": true,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAccount",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "assetMint",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenAccount",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenAccount",
+                "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+                "seeds": [
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "strategyAuthority",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "tokenProgram",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "strategyAuthority",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "strategyAuthority"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "tokenProgram",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "tokenProgram"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lending",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "lending",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "lending"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            },
+            "accountLink": {
+              "kind": "accountLinkNode",
+              "name": "lending",
+              "program": {
+                "kind": "programLinkNode",
+                "name": "jupiterLending"
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lendingAdmin",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "lendingAdmin",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "lending_admin"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenMint",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenMint",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "f_token_mint"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenReserve",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "tokenReserve",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "reserve"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "supplyPosition",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "supplyPosition",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "user_supply_position"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "lending",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "lending",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "lending"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "rateModel",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "rateModel",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "rate_model"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidityVault",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "liquidityVault",
+                "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+                "seeds": [
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "liquidity",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "tokenProgram",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "liquidity",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "liquidity"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "tokenProgram",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "tokenProgram"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidity",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "liquidity",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "liquidity"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidityProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "rewardsRateModel",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "accountFieldValueNode",
+              "account": "lending",
+              "path": "rewardsRateModel"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "associatedTokenProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "systemProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "11111111111111111111111111111111"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lendingProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9"
+            }
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "instructionArgumentNode",
+            "name": "discriminator",
+            "defaultValueStrategy": "omitted",
+            "type": {
+              "kind": "fixedSizeTypeNode",
+              "size": 8,
+              "type": {
+                "kind": "bytesTypeNode"
+              }
+            },
+            "defaultValue": {
+              "kind": "bytesValueNode",
+              "data": "4bca99fabebfd23d",
+              "encoding": "base16"
+            }
+          },
+          {
+            "kind": "instructionArgumentNode",
+            "name": "amount",
+            "type": {
+              "kind": "numberTypeNode",
+              "format": "u64",
+              "endian": "le"
+            }
+          }
+        ],
+        "discriminators": [
+          {
+            "kind": "fieldDiscriminatorNode",
+            "name": "discriminator",
+            "offset": 0
+          }
+        ]
+      },
+      {
+        "kind": "instructionNode",
+        "name": "withdraw",
+        "optionalAccountStrategy": "programId",
+        "accounts": [
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAuthority",
+            "isWritable": true,
+            "isSigner": true,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "strategyAccount",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "assetMint",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenAccount",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenAccount",
+                "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+                "seeds": [
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "strategyAuthority",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "tokenProgram",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "strategyAuthority",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "strategyAuthority"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "tokenProgram",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "tokenProgram"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lending",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "lending",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "lending"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "fTokenMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "fTokenMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "fTokenMint"
+                  }
+                }
+              ]
+            },
+            "accountLink": {
+              "kind": "accountLinkNode",
+              "name": "lending",
+              "program": {
+                "kind": "programLinkNode",
+                "name": "jupiterLending"
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lendingAdmin",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "lendingAdmin",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "lending_admin"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "fTokenMint",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "fTokenMint",
+                "programId": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "f_token_mint"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "tokenReserve",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "tokenReserve",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "reserve"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "supplyPosition",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "supplyPosition",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "user_supply_position"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "lending",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "lending",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "lending"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "rateModel",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "rateModel",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "rate_model"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidityVault",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "liquidityVault",
+                "programId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+                "seeds": [
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "liquidity",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "tokenProgram",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  },
+                  {
+                    "kind": "variablePdaSeedNode",
+                    "name": "assetMint",
+                    "type": {
+                      "kind": "publicKeyTypeNode"
+                    }
+                  }
+                ]
+              },
+              "seeds": [
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "liquidity",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "liquidity"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "tokenProgram",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "tokenProgram"
+                  }
+                },
+                {
+                  "kind": "pdaSeedValueNode",
+                  "name": "assetMint",
+                  "value": {
+                    "kind": "accountValueNode",
+                    "name": "assetMint"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidity",
+            "isWritable": true,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "pdaValueNode",
+              "pda": {
+                "kind": "pdaNode",
+                "name": "liquidity",
+                "programId": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
+                "seeds": [
+                  {
+                    "kind": "constantPdaSeedNode",
+                    "type": {
+                      "kind": "stringTypeNode",
+                      "encoding": "utf8"
+                    },
+                    "value": {
+                      "kind": "stringValueNode",
+                      "string": "liquidity"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "liquidityProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "rewardsRateModel",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "accountFieldValueNode",
+              "account": "lending",
+              "path": "rewardsRateModel"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "associatedTokenProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "systemProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "11111111111111111111111111111111"
+            }
+          },
+          {
+            "kind": "instructionAccountNode",
+            "name": "lendingProgram",
+            "isWritable": false,
+            "isSigner": false,
+            "isOptional": false,
+            "defaultValue": {
+              "kind": "publicKeyValueNode",
+              "publicKey": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9"
+            }
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "instructionArgumentNode",
+            "name": "discriminator",
+            "defaultValueStrategy": "omitted",
+            "type": {
+              "kind": "fixedSizeTypeNode",
+              "size": 8,
+              "type": {
+                "kind": "bytesTypeNode"
+              }
+            },
+            "defaultValue": {
+              "kind": "bytesValueNode",
+              "data": "f9d8bc0f41876827",
+              "encoding": "base16"
+            }
+          },
+          {
+            "kind": "instructionArgumentNode",
+            "name": "amount",
+            "type": {
+              "kind": "numberTypeNode",
+              "format": "u64",
+              "endian": "le"
+            }
+          }
+        ],
+        "discriminators": [
+          {
+            "kind": "fieldDiscriminatorNode",
+            "name": "discriminator",
+            "offset": 0
+          }
+        ]
+      }
+    ]
+  },
+  "additionalPrograms": [
+    {
+      "kind": "programNode",
+      "name": "jupiterLending",
+      "publicKey": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+      "version": "0.0.0",
+      "accounts": [
+        {
+          "kind": "accountNode",
+          "name": "lending",
+          "docs": [
+            "The start of a market account: as far as the fields an adapter call needs."
+          ],
+          "data": {
+            "kind": "structTypeNode",
+            "fields": [
+              {
+                "kind": "structFieldTypeNode",
+                "name": "discriminator",
+                "type": {
+                  "kind": "fixedSizeTypeNode",
+                  "size": 8,
+                  "type": {
+                    "kind": "bytesTypeNode"
+                  }
+                }
+              },
+              {
+                "kind": "structFieldTypeNode",
+                "name": "mint",
+                "type": {
+                  "kind": "publicKeyTypeNode"
+                }
+              },
+              {
+                "kind": "structFieldTypeNode",
+                "name": "fTokenMint",
+                "type": {
+                  "kind": "publicKeyTypeNode"
+                }
+              },
+              {
+                "kind": "structFieldTypeNode",
+                "name": "lendingId",
+                "type": {
+                  "kind": "numberTypeNode",
+                  "format": "u16",
+                  "endian": "le"
+                }
+              },
+              {
+                "kind": "structFieldTypeNode",
+                "name": "decimals",
+                "type": {
+                  "kind": "numberTypeNode",
+                  "format": "u8",
+                  "endian": "le"
+                }
+              },
+              {
+                "kind": "structFieldTypeNode",
+                "name": "rewardsRateModel",
+                "type": {
+                  "kind": "publicKeyTypeNode"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

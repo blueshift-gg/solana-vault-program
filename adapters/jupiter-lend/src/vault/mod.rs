@@ -11,6 +11,7 @@ use crate::constants::LENDING_PROGRAM;
 use crate::errors::AdapterError;
 use crate::state::Position;
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError};
+use vault_core::constants::TOKEN_ACCOUNT_AMOUNT;
 
 /// The accounts that define a vault's position: the interface prefix
 /// (`vault_core::constants`), then this adapter's first two.
@@ -150,7 +151,7 @@ pub(crate) fn lending_data(discriminator: &[u8; 8], amount: u64) -> [u8; 16] {
 pub(crate) fn token_balance(account: &AccountInfo) -> u64 {
     // SAFETY: nothing in this program holds a mutable borrow of account data.
     unsafe { account.borrow_data_unchecked() }
-        .get(64..72)
+        .get(TOKEN_ACCOUNT_AMOUNT..TOKEN_ACCOUNT_AMOUNT + 8)
         .map_or(0, |amount| u64::from_le_bytes(amount.try_into().unwrap()))
 }
 

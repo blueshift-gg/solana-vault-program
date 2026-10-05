@@ -17,7 +17,7 @@ use vault_tests::*;
 /// The same instruction without the adapter accounts: idle funds only.
 fn idle_only(f: &Fixture, mut ix: Instruction) -> Instruction {
     ix.accounts
-        .truncate(ix.accounts.len() - f.adapter_accounts().len());
+        .truncate(ix.accounts.len() - f.adapter_accounts("withdraw").len());
     ix
 }
 

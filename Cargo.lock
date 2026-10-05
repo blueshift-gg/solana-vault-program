@@ -3654,6 +3654,8 @@ dependencies = [
  "solana-account",
  "solana-instruction",
  "solana-program-error",
+ "solana-program-option",
+ "solana-program-pack",
  "solana-pubkey 4.2.1",
  "solana-sha256-hasher",
  "spl-token-2022-interface",

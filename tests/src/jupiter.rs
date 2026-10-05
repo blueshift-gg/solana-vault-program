@@ -99,22 +99,21 @@ pub fn market() -> Market {
     let f_token_account = ata(&f.strategy_authority, &f_token_mint.0);
     f.set_balance(f.user_assets, 10_000 * USDC);
 
-    f.adapter_own = vec![
-        AccountMeta::new(f_token_account, false),
-        AccountMeta::new(lending.0, false),
-        AccountMeta::new_readonly(lending_admin.0, false),
-        AccountMeta::new(f_token_mint.0, false),
-        AccountMeta::new(token_reserve.0, false),
-        AccountMeta::new(supply_position.0, false),
-        AccountMeta::new_readonly(rate_model.0, false),
-        AccountMeta::new(liquidity_vault.0, false),
-        AccountMeta::new(liquidity.0, false),
-        AccountMeta::new_readonly(LIQUIDITY, false),
-        AccountMeta::new_readonly(rewards_rate_model.0, false),
-        AccountMeta::new_readonly(ATA_PROGRAM, false),
-        AccountMeta::new_readonly(SYSTEM, false),
-        AccountMeta::new_readonly(LENDING, false),
-    ];
+    f.adapter_own = idl_accounts(
+        "jupiter-lend",
+        &[
+            ("fTokenAccount", f_token_account),
+            ("lending", lending.0),
+            ("lendingAdmin", lending_admin.0),
+            ("fTokenMint", f_token_mint.0),
+            ("tokenReserve", token_reserve.0),
+            ("supplyPosition", supply_position.0),
+            ("rateModel", rate_model.0),
+            ("liquidityVault", liquidity_vault.0),
+            ("liquidity", liquidity.0),
+            ("rewardsRateModel", rewards_rate_model.0),
+        ],
+    );
     let update_rate = Instruction {
         program_id: LENDING,
         accounts: vec![

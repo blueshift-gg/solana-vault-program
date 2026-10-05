@@ -111,7 +111,7 @@ impl<'a> Adapter<'a> {
     /// Move what sits in the strategy account back to idle as principal, up
     /// to `debt`. Every adapter call that moves funds ends here. Anything
     /// beyond `debt`, a gain not reported yet or a donation, stays in the
-    /// strategy account, where `Simulate` counts it and the clamp rates it.
+    /// strategy account, where `Simulate` counts it as a gain and locks it.
     pub fn sweep(
         &self,
         vault_account: &AccountInfo,

@@ -5,6 +5,8 @@
 //!
 //! `custody` and `jupiter` set a vault up behind each shipped adapter.
 
+use std::collections::HashMap;
+
 use mollusk_svm::{program::keyed_account_for_system_program, result::InstructionResult, Mollusk};
 use solana_account::Account;
 use solana_instruction::{AccountMeta, Instruction};
@@ -17,6 +19,80 @@ pub use ed25519_dalek::SigningKey;
 
 pub mod custody;
 pub mod jupiter;
+
+fn idl(name: &str) -> serde_json::Value {
+    let path = format!("{}/../idl/{name}.json", env!("CARGO_MANIFEST_DIR"));
+    serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap()
+}
+
+/// An instruction's accounts after the first `skip`, as its IDL lists them:
+/// the order, the flags and every fixed address are the IDL's; `at` gives the
+/// address of the rest.
+fn idl_metas<'a>(
+    instruction: &'a serde_json::Value,
+    at: &'a [(&str, Pubkey)],
+    skip: usize,
+) -> impl Iterator<Item = AccountMeta> + 'a {
+    let accounts = instruction["accounts"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .skip(skip);
+    accounts.map(|account| {
+        let name = account["name"].as_str().unwrap();
+        AccountMeta {
+            pubkey: match account["defaultValue"]["publicKey"].as_str() {
+                Some(fixed) => fixed.parse().unwrap(),
+                None => at.iter().find(|(known, _)| *known == name).unwrap().1,
+            },
+            is_signer: account["isSigner"].as_bool().unwrap(),
+            is_writable: account["isWritable"].as_bool().unwrap(),
+        }
+    })
+}
+
+/// An instruction of the program whose Codama IDL is `idl/<name>.json`, with
+/// its discriminator as the data; the caller appends the arguments.
+pub fn idl_instruction(name: &str, instruction: &str, at: &[(&str, Pubkey)]) -> Instruction {
+    let idl = idl(name);
+    let instructions = idl["program"]["instructions"].as_array().unwrap();
+    let node = instructions
+        .iter()
+        .find(|node| node["name"] == instruction)
+        .unwrap();
+    let hex = node["arguments"][0]["defaultValue"]["data"]
+        .as_str()
+        .unwrap();
+    Instruction {
+        program_id: idl["program"]["publicKey"]
+            .as_str()
+            .unwrap()
+            .parse()
+            .unwrap(),
+        accounts: idl_metas(node, at, 0).collect(),
+        data: (0..hex.len())
+            .step_by(2)
+            .map(|i| u8::from_str_radix(&hex[i..i + 2], 16).unwrap())
+            .collect(),
+    }
+}
+
+/// An adapter's own accounts for each call of the interface, after the
+/// prefix, from its IDL. A client resolves the addresses in `at` from the
+/// same file (`adapterAccounts` in vault-kit).
+pub fn idl_accounts(name: &str, at: &[(&str, Pubkey)]) -> HashMap<String, Vec<AccountMeta>> {
+    let idl = idl(name);
+    let instructions = idl["program"]["instructions"].as_array().unwrap().iter();
+    instructions
+        .filter(|node| {
+            ["simulate", "deposit", "withdraw"].contains(&node["name"].as_str().unwrap())
+        })
+        .map(|node| {
+            let name = node["name"].as_str().unwrap().to_string();
+            (name, idl_metas(node, at, 4).collect())
+        })
+        .collect()
+}
 
 pub const PROGRAM_ID: Pubkey = Pubkey::new_from_array(vault_core::ID);
 pub const TOKEN: Pubkey = mollusk_svm_programs_token::token::ID;
@@ -163,8 +239,9 @@ pub struct Fixture {
     pub escrow_account: Pubkey,
     pub strategy_authority: Pubkey,
     pub strategy_account: Pubkey,
-    /// The adapter's own accounts, after the interface prefix and the program.
-    pub adapter_own: Vec<AccountMeta>,
+    /// The adapter's own accounts for each of its calls, after the interface
+    /// prefix and the program, as `idl_accounts` reads them.
+    pub adapter_own: HashMap<String, Vec<AccountMeta>>,
 
     pub user_assets: Pubkey,
     pub user_shares: Pubkey,
@@ -278,7 +355,7 @@ impl Fixture {
             escrow_account,
             strategy_authority,
             strategy_account,
-            adapter_own: vec![],
+            adapter_own: HashMap::new(),
             user_assets,
             user_shares,
             fee_shares,
@@ -405,7 +482,7 @@ impl Fixture {
     /// The trailing accounts that reach the adapter: the interface prefix,
     /// the adapter program, then the adapter's own accounts. The strategy
     /// authority is writable because some protocols require it of a signer.
-    pub fn adapter_accounts(&self) -> Vec<AccountMeta> {
+    pub fn adapter_accounts(&self, call: &str) -> Vec<AccountMeta> {
         let mut accounts = vec![
             AccountMeta::new(self.strategy_authority, false),
             AccountMeta::new(self.strategy_account, false),
@@ -413,7 +490,7 @@ impl Fixture {
             AccountMeta::new_readonly(self.token_program, false),
             AccountMeta::new_readonly(self.adapter, false),
         ];
-        accounts.extend(self.adapter_own.iter().cloned());
+        accounts.extend(self.adapter_own.get(call).cloned().unwrap_or_default());
         accounts
     }
 
@@ -518,7 +595,12 @@ impl Fixture {
                 AccountMeta::new(self.idle_account, false),
             ],
         );
-        ix.accounts.extend(self.adapter_accounts());
+        let call = if discriminator == 20 {
+            "deposit"
+        } else {
+            "withdraw"
+        };
+        ix.accounts.extend(self.adapter_accounts(call));
         ix
     }
 
@@ -625,7 +707,7 @@ impl Fixture {
                 AccountMeta::new_readonly(self.idle_account, false),
             ],
         );
-        ix.accounts.extend(self.adapter_accounts());
+        ix.accounts.extend(self.adapter_accounts("simulate"));
         ix
     }
 
@@ -653,7 +735,7 @@ impl Fixture {
                 AccountMeta::new_readonly(self.share_program, false),
             ],
         );
-        ix.accounts.extend(self.adapter_accounts());
+        ix.accounts.extend(self.adapter_accounts("withdraw"));
         ix
     }
 

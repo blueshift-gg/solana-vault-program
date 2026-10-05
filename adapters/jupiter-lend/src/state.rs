@@ -2,7 +2,7 @@
 //! read from the lending program's market account and the strategy
 //! authority's fToken account.
 
-use crate::{constants::*, errors::AdapterError};
+use crate::{constants::*, errors::AdapterError, vault::token_balance};
 use pinocchio::{
     account_info::AccountInfo, program_error::ProgramError, pubkey::find_program_address,
 };
@@ -62,10 +62,8 @@ impl Position {
             return Err(AdapterError::InvalidFTokenAccount.into());
         }
         // Not created yet is an empty position
-        // SAFETY: as above.
-        let data = unsafe { f_token_account.borrow_data_unchecked() };
-        let shares = if f_token_account.is_owned_by(token_program.key()) && data.len() >= 72 {
-            u64::from_le_bytes(data[64..72].try_into().unwrap())
+        let shares = if f_token_account.is_owned_by(token_program.key()) {
+            token_balance(f_token_account)
         } else {
             0
         };

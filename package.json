@@ -4,7 +4,7 @@
   "type": "module",
   "workspaces": ["packages/vault-kit"],
   "scripts": {
-    "generate": "bun idl/vault.ts && cargo fmt -p vault-rust",
+    "generate": "bun idl/vault.ts && bun idl/adapters.ts && cargo fmt -p vault-rust",
     "build": "tsc -b packages/vault-kit",
     "test": "bun run build && tsc -p tsconfig.test.json && bun test"
   },

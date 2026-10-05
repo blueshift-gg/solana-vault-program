@@ -11,7 +11,7 @@ use pinocchio::{
     sysvars::{clock::Clock, Sysvar},
     ProgramResult,
 };
-use vault_core::constants::{VAULT_LEN, VAULT_VERSION};
+use vault_core::constants::*;
 use vault_core::state::Vault;
 
 /// The current Unix timestamp.
@@ -48,15 +48,19 @@ impl<'a> TokenAccount<'a> {
     pub fn load(account: &'a AccountInfo, token_program: &Pubkey) -> Result<Self, ProgramError> {
         // SAFETY: the program holds no mutable borrow of a token account.
         let data = unsafe { account.borrow_data_unchecked() };
-        if !account.is_owned_by(token_program) || data.len() < 165 {
+        if !account.is_owned_by(token_program) || data.len() < TOKEN_ACCOUNT_LEN {
             return Err(CustodyError::InvalidTokenAccount.into());
         }
         // SAFETY: the length check above covers every offset read; `Pubkey`
         // has alignment 1.
         Ok(Self {
             mint: unsafe { &*(data.as_ptr() as *const Pubkey) },
-            owner: unsafe { &*(data.as_ptr().add(32) as *const Pubkey) },
-            amount: u64::from_le_bytes(data[64..72].try_into().unwrap()),
+            owner: unsafe { &*(data.as_ptr().add(TOKEN_ACCOUNT_OWNER) as *const Pubkey) },
+            amount: u64::from_le_bytes(
+                data[TOKEN_ACCOUNT_AMOUNT..TOKEN_ACCOUNT_AMOUNT + 8]
+                    .try_into()
+                    .unwrap(),
+            ),
             data,
         })
     }
@@ -64,14 +68,15 @@ impl<'a> TokenAccount<'a> {
     /// Initialized and not frozen.
     #[inline(always)]
     pub fn is_usable(&self) -> bool {
-        self.data[108] == 1
+        self.data[TOKEN_ACCOUNT_STATE] == 1
     }
 
     /// No delegate and no close authority: nobody but its owner has, or can
     /// gain, a way in. A balance is fine; anyone can send tokens to an account.
     #[inline(always)]
     pub fn is_clean(&self) -> bool {
-        self.data[72..76] == [0; 4] && self.data[129..133] == [0; 4]
+        self.data[TOKEN_ACCOUNT_DELEGATE..TOKEN_ACCOUNT_DELEGATE + 4] == [0; 4]
+            && self.data[TOKEN_ACCOUNT_CLOSE_AUTHORITY..TOKEN_ACCOUNT_CLOSE_AUTHORITY + 4] == [0; 4]
     }
 }
 
